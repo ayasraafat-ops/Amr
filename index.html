@@ -1044,8 +1044,12 @@
             let totalSize = 0;
             state.files.forEach(f => {
                 totalSize += f.file.size;
-                const parts = f.path.split('/');
-                for (let i = 1; i < parts.length; i++) folders.add(parts.slice(0, i).join('/'));
+                const path = f.path;
+                let slashIndex = path.indexOf('/');
+                while (slashIndex !== -1) {
+                    folders.add(path.substring(0, slashIndex));
+                    slashIndex = path.indexOf('/', slashIndex + 1);
+                }
             });
             $('statsBar').classList.remove('hidden');
             $('statFiles').textContent = state.files.length;
